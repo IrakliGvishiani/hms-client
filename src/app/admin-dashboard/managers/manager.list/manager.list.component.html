@@ -1,0 +1,164 @@
+<div class="managers-page">
+
+  <div class="header-row">
+    <div>
+      <h2>Managers Management</h2>
+      <p>Register, update and delete hotel managers.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openCreateModal()">
+      + Register Manager
+    </button>
+  </div>
+
+  <!-- 🔴 HOTEL FILTER DROPDOWN -->
+  <div class="filter-row" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+  <label for="hotelFilter"><strong>Filter by Hotel:</strong></label>
+  <select id="hotelFilter" [value]="selectedHotelId()" (change)="onHotelFilterChange($event)">
+    <option value="ALL">All Hotels</option>
+    @for (hotel of allHotels(); track hotel.id) {
+      <option [value]="hotel.id">{{ hotel.name }}</option>
+    }
+  </select>
+</div>
+
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (loading() && !isEditModalOpen() && !isCreateModalOpen()) {
+    <p>Loading managers...</p>
+  } @else if (filteredManagers().length === 0) {
+    <p>No managers found for selected filter.</p>
+  } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Hotel</th> <!-- 🔴 HOTELS COLUMN -->
+          <th>Personal Number</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 🔴 FILTERED MANAGERS LOOP -->
+        @for (manager of filteredManagers(); track manager.id) {
+          <tr>
+            <td>{{ manager.id }}</td>
+            <td>{{ manager.firstName }} {{ manager.lastName }}</td>
+            <td>
+              <span class="hotel-badge" style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 600;">
+                {{ manager.hotelName || 'N/A' }}
+              </span>
+            </td>
+            <td>{{ manager.personalNumber }}</td>
+            <td>{{ manager.email }}</td>
+            <td>{{ manager.phoneNumber }}</td>
+            <td class="actions">
+              <button class="btn-secondary" (click)="openEditModal(manager)">Edit</button>
+              <button class="btn-danger" (click)="deleteManager(manager.id)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- REGISTER MANAGER MODAL -->
+  @if (isCreateModalOpen()) {
+    <div class="modal-backdrop">
+      <div class="modal-content">
+        <h3>Register New Manager</h3>
+
+        <form (ngSubmit)="createManager()">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" [(ngModel)]="newManager.firstName" name="firstName" required />
+          </div>
+
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" [(ngModel)]="newManager.lastName" name="lastName" required />
+          </div>
+
+          <div class="form-group">
+            <label>Personal Number *</label>
+            <input type="text" [(ngModel)]="newManager.personalNumber" name="personalNumber" required />
+          </div>
+
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" [(ngModel)]="newManager.email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" [(ngModel)]="newManager.password" name="password" required />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" [(ngModel)]="newManager.phoneNumber" name="phoneNumber" />
+          </div>
+
+          <div class="form-group">
+  <label>Hotel *</label>
+  <select [(ngModel)]="newManager.hotelId" name="hotelId" required>
+    <option [value]="0" disabled selected>-- Select Hotel --</option>
+    @for (hotel of allHotels(); track hotel.id) {
+      <option [value]="hotel.id">{{ hotel.name }}</option>
+    }
+  </select>
+</div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" (click)="closeCreateModal()">Cancel</button>
+            <button type="submit" class="btn-primary" [disabled]="loading()">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- EDIT MANAGER MODAL -->
+  @if (isEditModalOpen() && selectedManager()) {
+    <div class="modal-backdrop">
+      <div class="modal-content">
+        <h3>Edit Manager</h3>
+
+        <form (ngSubmit)="saveManager()">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" [(ngModel)]="selectedManager()!.firstName" name="firstName" required />
+          </div>
+
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" [(ngModel)]="selectedManager()!.lastName" name="lastName" required />
+          </div>
+
+          <div class="form-group">
+            <label>Personal Number</label>
+            <input type="text" [(ngModel)]="selectedManager()!.personalNumber" name="personalNumber" required />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" [(ngModel)]="selectedManager()!.phoneNumber" name="phoneNumber" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+            <button type="submit" class="btn-primary" [disabled]="loading()">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+</div>

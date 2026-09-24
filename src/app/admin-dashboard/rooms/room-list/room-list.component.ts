@@ -53,4 +53,23 @@ export class RoomListComponent implements OnInit {
       }
     });
   }
+
+  
+  deleteRoom(roomId: number): void {
+    if (!confirm('Are You Sure You Want to Delete this Room?')) {
+      return;
+    }
+
+    this.roomService.delete(roomId).subscribe({
+      next: () => {
+        
+        this.rooms.update(prev => prev.filter(r => r.id !== roomId));
+      },
+      error: (err) => {
+        this.errorMessage.set(
+          err.error?.message ?? 'Error while deleting room.'
+        );
+      }
+    });
+  }
 }

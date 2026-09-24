@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { ApiResponse, LoginRequest, LoginResponse } from '../models/auth.models';
 import { getRoleFromToken } from '../utils/jwt.util';
+import { ManagerRegistrationRequestDto } from '../models/manager.models';
 
 @Injectable({
   providedIn: 'root'
@@ -59,5 +60,8 @@ export class AuthService {
 
   getAccessToken(): string | null {
     return localStorage.getItem('access_token');
+  }
+  registerManager(model: ManagerRegistrationRequestDto): Observable<ApiResponse<number>> {
+    return this.http.post<ApiResponse<number>>(`${this.apiUrl}/register-manager`, model);
   }
 }

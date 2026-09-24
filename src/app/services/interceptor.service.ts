@@ -28,7 +28,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const accessToken = authService.getAccessToken();
   const isRefreshRequest = req.url.includes('/auth/refresh-token');
-  const isAuthRequest = req.url.includes('/auth/login') || req.url.includes('/auth/register');
+  
+
+  const isAuthRequest = 
+    req.url.endsWith('/auth/login') || 
+    req.url.endsWith('/auth/register');
 
   if (accessToken && !isRefreshRequest && !isAuthRequest && isTokenExpired(accessToken)) {
     return authService.refreshToken().pipe(
@@ -70,7 +74,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       errorDialog.setErrMessage(message);
       errorDialog.showDialog();
 
-      if (err.status === 401) {
+      
+      if (err.status === 401 && !isAuthRequest) {
         authService.logout();
       }
 

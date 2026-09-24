@@ -1,0 +1,351 @@
+<div class="room-form-page">
+
+  <!-- Header -->
+  <div class="page-header">
+
+    <div>
+      <h2>
+        {{ isEditMode() ? 'Edit Room' : 'Create Room' }}
+      </h2>
+
+      <p>
+        {{ isEditMode()
+          ? 'Update room information and manage photos.'
+          : 'Create a new room for this hotel.' }}
+      </p>
+    </div>
+
+    <div class="hotel-info">
+      Hotel #{{ hotelId }}
+    </div>
+
+  </div>
+
+
+  <!-- Error -->
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+  }
+
+
+  <!-- Loading -->
+  @if (loading()) {
+
+    <div class="loading">
+      Loading...
+    </div>
+
+  } @else {
+
+    <!-- Main Form -->
+    <form (ngSubmit)="onSubmit()" class="room-form">
+
+      <!-- Basic Information -->
+      <div class="form-section">
+
+        <div class="section-header">
+          <div>
+            <h3>Room Information</h3>
+            <p>Enter the basic information about the room.</p>
+          </div>
+        </div>
+
+
+        <div class="form-grid">
+
+          <!-- Name -->
+          <div class="form-group">
+
+            <label for="name">
+              Room Name
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              name="name"
+              [(ngModel)]="name"
+              placeholder="e.g. Deluxe Room"
+              required
+            />
+
+          </div>
+
+
+          <!-- Price -->
+          <div class="form-group">
+
+            <label for="price">
+              Price
+            </label>
+
+            <input
+              id="price"
+              type="number"
+              name="price"
+              [(ngModel)]="price"
+              min="1"
+              step="0.01"
+              placeholder="e.g. 250"
+              required
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Existing Photos -->
+      @if (isEditMode() && existingImages().length > 0) {
+
+        <div class="photos-section">
+
+          <div class="section-header">
+
+            <div>
+              <h3>Room Photos</h3>
+
+              <p>
+                Manage existing photos, primary image and deletions.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="existing-images">
+
+            @for (
+              image of existingImages();
+              track image.id
+            ) {
+
+              <div
+                class="image-card"
+                [class.primary]="image.isPrimary"
+                [class.marked-for-deletion]="image.markedForDeletion"
+              >
+
+                <div class="image-wrapper">
+
+                  <img
+                    [src]="image.url"
+                    alt="Room photo"
+                  />
+
+
+                  @if (
+                    image.isPrimary &&
+                    !image.markedForDeletion
+                  ) {
+
+                    <span class="primary-badge">
+                      ★ Primary
+                    </span>
+
+                  }
+
+
+                  @if (image.markedForDeletion) {
+
+                    <div class="deletion-overlay">
+
+                      <span>
+                        Marked for deletion
+                      </span>
+
+                    </div>
+
+                  }
+
+                </div>
+
+
+                <div class="image-actions">
+
+                  @if (!image.markedForDeletion) {
+
+                    @if (!image.isPrimary) {
+
+                      <button
+                        type="button"
+                        class="btn-primary-small"
+                        (click)="setPrimary(image.id)"
+                      >
+                        Set as Primary
+                      </button>
+
+                    }
+
+                    <button
+                      type="button"
+                      class="btn-delete-small"
+                      (click)="toggleDelete(image.id)"
+                    >
+                      Delete
+                    </button>
+
+                  } @else {
+
+                    <button
+                      type="button"
+                      class="btn-restore-small"
+                      (click)="toggleDelete(image.id)"
+                    >
+                      Undo Delete
+                    </button>
+
+                  }
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- Add Photos -->
+      <div class="photos-section">
+
+        <div class="section-header">
+
+          <div>
+            <h3>
+              {{ isEditMode()
+                ? 'Add New Photos'
+                : 'Room Photos' }}
+            </h3>
+
+            <p>
+              Select one or multiple images.
+            </p>
+          </div>
+
+        </div>
+
+
+        <!-- Upload -->
+        <label class="upload-area">
+
+          <span class="upload-icon">
+            +
+          </span>
+
+          <span class="upload-title">
+            Choose photos
+          </span>
+
+          <span class="upload-description">
+            You can select multiple images at once.
+          </span>
+
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            (change)="onFilesSelected($event)"
+          />
+
+        </label>
+
+
+        <!-- New Photo Previews -->
+        @if (selectedFilePreviews.length > 0) {
+
+          <div class="selected-photos">
+
+            <div class="selected-photos-header">
+
+              <h4>
+                Selected Photos
+              </h4>
+
+              <span>
+                {{ selectedFilePreviews.length }} photos
+              </span>
+
+            </div>
+
+
+            <div class="image-grid">
+
+              @for (
+                preview of selectedFilePreviews;
+                track preview;
+                let i = $index
+              ) {
+
+                <div class="image-card selected-image">
+
+                  <img
+                    [src]="preview"
+                    alt="Selected room photo"
+                  />
+
+
+                  <button
+                    type="button"
+                    class="remove-image"
+                    (click)="removeSelectedFile(i)"
+                    aria-label="Remove photo"
+                  >
+                    ×
+                  </button>
+
+                </div>
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- Actions -->
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          [disabled]="loading()"
+          (click)="goBack()"
+        >
+          Cancel
+        </button>
+
+
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="loading()"
+        >
+
+          @if (loading()) {
+            Saving...
+          } @else {
+            {{ isEditMode() ? 'Save Changes' : 'Create Room' }}
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  }
+
+</div>

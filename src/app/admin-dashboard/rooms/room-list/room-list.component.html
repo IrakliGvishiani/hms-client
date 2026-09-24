@@ -67,22 +67,26 @@
 
             <td class="actions">
 
-              <a
-                [routerLink]="[
-                  '/admin/hotels',
-                  hotelId,
-                  'rooms',
-                  room.id,
-                  'edit'
-                ]">
-                Update
-              </a>
+  <a
+    [routerLink]="[
+      '/admin/hotels',
+      hotelId,
+      'rooms',
+      room.id,
+      'edit'
+    ]">
+    Update
+  </a>
 
-              <button class="btn-danger">
-                Delete
-              </button>
+  
+  <button 
+    class="btn-danger" 
+    (click)="deleteRoom(room.id)"
+  >
+    Delete
+  </button>
 
-            </td>
+</td>
 
           </tr>
 
