@@ -1,0 +1,66 @@
+<div class="admin-layout">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      HMS
+    </div>
+
+    <nav class="navigation">
+
+      <a routerLink="/admin/dashboard"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }">
+        Dashboard
+      </a>
+
+      <a routerLink="/admin/hotels"
+         routerLinkActive="active">
+        Hotels
+      </a>
+
+
+      <a routerLink="/admin/managers"
+         routerLinkActive="active">
+        Managers
+      </a>
+
+      <a routerLink="/admin/reservations"
+         routerLinkActive="active">
+        Reservations
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="logout-button">
+        Logout
+      </button>
+    </div>
+
+  </aside>
+
+
+  <main class="main-content">
+
+    <header class="topbar">
+      <div>
+        <h1>Admin Panel</h1>
+        <p>Hotel Management System</p>
+      </div>
+
+      <div class="admin-info">
+        <span>Admin</span>
+      </div>
+    </header>
+
+
+    <section class="page-content">
+
+      <router-outlet></router-outlet>
+
+    </section>
+
+  </main>
+
+</div>

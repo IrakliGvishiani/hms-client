@@ -1,0 +1,97 @@
+<div class="room-list-page">
+
+  <div class="header-row">
+    <div>
+      <h2>Rooms</h2>
+      <p>Rooms of Hotel #{{ hotelId }}</p>
+    </div>
+
+    <a
+      [routerLink]="['/admin/hotels', hotelId, 'rooms', 'new']"
+      class="btn-primary">
+      + New Room
+    </a>
+  </div>
+
+  @if (loading()) {
+
+    <p>Loading...</p>
+
+  } @else if (errorMessage()) {
+
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+
+  } @else if (rooms().length === 0) {
+
+    <div class="empty-state">
+      <p>No rooms found for this hotel.</p>
+    </div>
+
+  } @else {
+
+    <table>
+
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @for (room of rooms(); track room.id) {
+
+          <tr>
+
+            <td>
+              @if (room.primaryImageUrl) {
+                <img
+                  [src]="room.primaryImageUrl"
+                  [alt]="room.name"
+                  class="thumb">
+              }
+            </td>
+
+            <td>
+              {{ room.name }}
+            </td>
+
+            <td>
+              ₾{{ room.price }}
+            </td>
+
+            <td class="actions">
+
+              <a
+                [routerLink]="[
+                  '/admin/hotels',
+                  hotelId,
+                  'rooms',
+                  room.id,
+                  'edit'
+                ]">
+                Update
+              </a>
+
+              <button class="btn-danger">
+                Delete
+              </button>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  }
+
+</div>

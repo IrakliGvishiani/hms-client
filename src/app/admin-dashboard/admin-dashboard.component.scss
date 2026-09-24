@@ -1,0 +1,100 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f6f8;
+}
+
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: #1f2937;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  padding: 0 12px;
+  margin-bottom: 40px;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.navigation a {
+  color: #d1d5db;
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.navigation a:hover {
+  background: #374151;
+  color: white;
+}
+
+.navigation a.active {
+  background: #2563eb;
+  color: white;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #374151;
+  color: white;
+}
+
+.logout-button:hover {
+  background: #4b5563;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  height: 80px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.topbar p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.admin-info {
+  font-weight: 600;
+}
+
+.page-content {
+  padding: 32px;
+}

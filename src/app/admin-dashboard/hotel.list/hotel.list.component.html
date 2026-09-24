@@ -1,0 +1,63 @@
+<div class="hotel-list-page">
+  <div class="header-row">
+    <h2>Hotels</h2>
+    <a routerLink="/admin/hotels/new" class="btn-primary">+ New Hotel</a>
+  </div>
+
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>City</th>
+          <th>Country</th>
+          <th>Rating</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (hotel of hotels(); track hotel.id) {
+          <tr>
+            <td>
+              @if (hotel.primaryImageUrl) {
+                <img [src]="hotel.primaryImageUrl" alt="{{ hotel.name }}" class="thumb">
+              }
+            </td>
+            <td>{{ hotel.name }}</td>
+            <td>{{ hotel.city }}</td>
+            <td>{{ hotel.country }}</td>
+            <td>{{ hotel.rating }} ★</td>
+            <td class="actions">
+
+  <a
+    [routerLink]="['/admin/hotels', hotel.id, 'rooms']"
+    class="btn-secondary">
+    Rooms
+  </a>
+
+  <a
+    [routerLink]="['/admin/hotels', hotel.id, 'edit']">
+    Update
+  </a>
+
+  <button
+    (click)="onDelete(hotel.id)"
+    class="btn-danger">
+    Delete
+  </button>
+
+</td>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="pageNumber() === 1">←</button>
+      <span>Page {{ pageNumber() }}</span>
+      <button (click)="nextPage()" [disabled]="pageNumber() * pageSize >= totalCount()">→</button>
+    </div>
+  }
+</div>

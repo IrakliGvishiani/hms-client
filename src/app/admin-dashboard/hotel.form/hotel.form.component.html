@@ -1,0 +1,276 @@
+<div class="hotel-form-page">
+
+  <div class="form-header">
+    <div>
+      <h2>{{ isEditMode() ? 'Update Hotel' : 'New Hotel' }}</h2>
+      <p>
+        {{ isEditMode()
+          ? 'Update hotel information and manage photos.'
+          : 'Add a new hotel to the system.' }}
+      </p>
+    </div>
+  </div>
+
+  <form class="hotel-form" (ngSubmit)="onSubmit()">
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="name">Hotel Name</label>
+
+        <input
+          id="name"
+          type="text"
+          name="name"
+          [(ngModel)]="name"
+          placeholder="Enter hotel name"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+
+        <input
+          id="country"
+          type="text"
+          name="country"
+          [(ngModel)]="country"
+          placeholder="Enter country"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City</label>
+
+        <input
+          id="city"
+          type="text"
+          name="city"
+          [(ngModel)]="city"
+          placeholder="Enter city"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="rating">Rating</label>
+
+        <input
+          id="rating"
+          type="number"
+          name="rating"
+          [(ngModel)]="rating"
+          min="1"
+          max="5"
+          placeholder="1 - 5"
+          required>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="address">Address</label>
+
+        <input
+          id="address"
+          type="text"
+          name="address"
+          [(ngModel)]="address"
+          placeholder="Enter hotel address"
+          required>
+      </div>
+
+    </div>
+
+
+    <!-- Existing images -->
+
+   <!-- Existing images -->
+
+@if (isEditMode() && existingImages().length > 0) {
+
+  <div class="photos-section">
+
+    <div class="section-header">
+      <div>
+        <h3>Hotel Photos</h3>
+        <p>Manage existing photos, primary image and deletions.</p>
+      </div>
+    </div>
+
+    <div class="existing-images">
+
+      @for (img of existingImages(); track img.id) {
+
+        <div
+          class="image-card"
+          [class.primary]="img.isPrimary"
+          [class.marked-for-deletion]="img.markedForDeletion">
+
+          <div class="image-wrapper">
+
+            <img
+              [src]="img.url"
+              alt="Hotel photo">
+
+            @if (img.isPrimary && !img.markedForDeletion) {
+              <span class="primary-badge">
+                ★ Primary
+              </span>
+            }
+
+            @if (img.markedForDeletion) {
+              <div class="deletion-overlay">
+                <span>Marked for deletion</span>
+              </div>
+            }
+
+          </div>
+
+          <div class="image-actions">
+
+            @if (!img.markedForDeletion) {
+
+              @if (!img.isPrimary) {
+                <button
+                  type="button"
+                  class="btn-primary-small"
+                  (click)="setPrimary(img.id)">
+                  Set as Primary
+                </button>
+              }
+
+              <button
+                type="button"
+                class="btn-delete-small"
+                (click)="toggleDelete(img.id)">
+                Delete
+              </button>
+
+            } @else {
+
+              <button
+                type="button"
+                class="btn-restore-small"
+                (click)="toggleDelete(img.id)">
+                Undo Delete
+              </button>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+}
+
+    <!-- New photos -->
+
+    <div class="photos-section">
+
+      <div class="section-header">
+        <div>
+          <h3>
+            {{ isEditMode() ? 'Add New Photos' : 'Hotel Photos' }}
+          </h3>
+
+          <p>
+            Select one or multiple images.
+          </p>
+        </div>
+      </div>
+
+     <label class="upload-area">
+
+  <span class="upload-icon">+</span>
+
+  <span class="upload-title">
+    Choose photos
+  </span>
+
+  <span class="upload-description">
+    You can select multiple images at once.
+  </span>
+
+  <input
+    type="file"
+    multiple
+    accept="image/*"
+    (change)="onFilesSelected($event)">
+
+</label>
+
+@if (selectedFilePreviews.length > 0) {
+
+  <div class="selected-photos">
+
+    <div class="selected-photos-header">
+      <h4>Selected Photos</h4>
+      <span>{{ selectedFilePreviews.length }} photos</span>
+    </div>
+
+    <div class="image-grid">
+
+      @for (preview of selectedFilePreviews; track preview; let i = $index) {
+
+        <div class="image-card selected-image">
+
+          <img
+            [src]="preview"
+            alt="Selected hotel photo">
+
+          <button
+            type="button"
+            class="remove-image"
+            (click)="removeSelectedFile(i)"
+            aria-label="Remove photo">
+            ×
+          </button>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+}
+
+    </div>
+
+
+    @if (errorMessage()) {
+      <div class="error-message">
+        {{ errorMessage() }}
+      </div>
+    }
+
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="btn-secondary">
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="loading()">
+
+        {{ loading()
+          ? 'Uploading...'
+          : (isEditMode() ? 'Save Changes' : 'Create Hotel') }}
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

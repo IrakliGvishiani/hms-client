@@ -1,0 +1,23 @@
+<div class="login-wrapper">
+  <form (ngSubmit)="onSubmit()" class="login-form">
+    <h2>შესვლა</h2>
+
+    <label>
+      Email
+      <input type="email" name="userName" [(ngModel)]="userName" required>
+    </label>
+
+    <label>
+      პაროლი
+      <input type="password" name="password" [(ngModel)]="password" required>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Loading...' : 'Enter' }}
+    </button>
+  </form>
+</div>
