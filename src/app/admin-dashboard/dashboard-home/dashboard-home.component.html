@@ -1,78 +1,130 @@
 <div class="dashboard">
 
-  <div class="dashboard-header">
-    <div>
-      <h2>Dashboard</h2>
-      <p>Overview of your hotel management system</p>
+  @if (loading()) {
+
+    <div class="loading">
+      Loading dashboard...
     </div>
-  </div>
 
-  <div class="stats-grid">
+  } @else if (errorMessage()) {
 
-    <div class="stat-card">
-      <div class="stat-content">
-        <span>Total Hotels</span>
-        <strong>12</strong>
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+
+  } @else if (analytics()) {
+
+    <div class="dashboard-header">
+      <div>
+        <h2>Dashboard</h2>
+        <p>Overview of your hotel management system</p>
       </div>
     </div>
 
-    <div class="stat-card">
-      <div class="stat-content">
-        <span>Total Rooms</span>
-        <strong>84</strong>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <span>Total Rooms</span>
+          <strong>
+            {{ analytics()!.totalRooms }}
+          </strong>
+        </div>
       </div>
+
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <span>Total Guests</span>
+          <strong>
+            {{ analytics()!.totalGuests }}
+          </strong>
+        </div>
+      </div>
+
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <span>Total Reservations</span>
+          <strong>
+            {{ analytics()!.totalReservations }}
+          </strong>
+        </div>
+      </div>
+
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <span>Active Reservations</span>
+          <strong>
+            {{ analytics()!.activeReservations }}
+          </strong>
+        </div>
+      </div>
+
     </div>
 
-    <div class="stat-card">
-      <div class="stat-content">
-        <span>Total Guests</span>
-        <strong>156</strong>
-      </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-content">
-        <span>Total Reservations</span>
-        <strong>243</strong>
-      </div>
-    </div>
+    <div class="dashboard-sections">
 
-  </div>
 
-  <div class="dashboard-sections">
+      <div class="dashboard-card">
 
-    <div class="dashboard-card">
-      <h3>Room Status</h3>
+        <h3>Room Status</h3>
 
-      <div class="room-status">
+        <div class="room-status">
 
-        <div class="status-item">
-          <span>Available</span>
-          <strong>32</strong>
+          <div class="status-item">
+            <span>Available</span>
+            <strong>
+              {{ analytics()!.availableRooms }}
+            </strong>
+          </div>
+
+
+          <div class="status-item">
+            <span>Occupied</span>
+            <strong>
+              {{ analytics()!.occupiedRooms }}
+            </strong>
+          </div>
+
+
+          <div class="status-item">
+            <span>Reserved</span>
+            <strong>
+              {{ analytics()!.reservedRooms }}
+            </strong>
+          </div>
+
         </div>
 
-        <div class="status-item">
-          <span>Occupied</span>
-          <strong>38</strong>
+      </div>
+
+
+      @if (analytics()!.hotelId !== null) {
+
+        <div class="dashboard-card">
+
+          <h3>Revenue</h3>
+
+          <div class="revenue">
+
+            <span>Total Revenue</span>
+
+            <strong>
+              ₾ {{ analytics()!.totalRevenue | number:'1.2-2' }}
+            </strong>
+
+          </div>
+
         </div>
 
-        <div class="status-item">
-          <span>Reserved</span>
-          <strong>14</strong>
-        </div>
+      }
 
-      </div>
     </div>
 
-    <div class="dashboard-card">
-      <h3>Revenue</h3>
-
-      <div class="revenue">
-        <span>Total Revenue</span>
-        <strong>₾ 45,000</strong>
-      </div>
-    </div>
-
-  </div>
+  }
 
 </div>

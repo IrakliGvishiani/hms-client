@@ -11,7 +11,7 @@
     </button>
   </div>
 
-  <!-- 🔴 HOTEL FILTER DROPDOWN -->
+  
   <div class="filter-row" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
   <label for="hotelFilter"><strong>Filter by Hotel:</strong></label>
   <select id="hotelFilter" [value]="selectedHotelId()" (change)="onHotelFilterChange($event)">
@@ -38,7 +38,7 @@
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>Hotel</th> <!-- 🔴 HOTELS COLUMN -->
+          <th>Hotel</th> 
           <th>Personal Number</th>
           <th>Email</th>
           <th>Phone Number</th>
@@ -46,7 +46,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- 🔴 FILTERED MANAGERS LOOP -->
+        
         @for (manager of filteredManagers(); track manager.id) {
           <tr>
             <td>{{ manager.id }}</td>
@@ -69,7 +69,7 @@
     </table>
   }
 
-  <!-- REGISTER MANAGER MODAL -->
+
   @if (isCreateModalOpen()) {
     <div class="modal-backdrop">
       <div class="modal-content">
@@ -125,7 +125,7 @@
     </div>
   }
 
-  <!-- EDIT MANAGER MODAL -->
+ 
   @if (isEditModalOpen() && selectedManager()) {
     <div class="modal-backdrop">
       <div class="modal-content">

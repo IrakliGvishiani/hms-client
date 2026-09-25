@@ -14,6 +14,8 @@ import { RoomFormComponent } from './admin-dashboard/rooms/room.form/room.form.c
 
 import { ManagerListComponent } from './admin-dashboard/managers/manager.list/manager.list.component';
 import { HotelAnalyticsComponent } from './admin-dashboard/managers/hotel.analytics/hotel.analytics.component';
+import { ReservationListComponent } from './admin-dashboard/reservations/reservation.list/reservation.list.component';
+import { ReservationFormComponent } from './admin-dashboard/reservations/reservation.form/reservation.form.component';
 
 export const routes: Routes = [
   {
@@ -60,7 +62,15 @@ export const routes: Routes = [
       {
         path: 'managers',
         component: ManagerListComponent
-      }
+      },
+      {
+  path: 'reservations',
+  children: [
+    { path: '', component: ReservationListComponent },
+    { path: 'new', component: ReservationFormComponent },
+    { path: ':id/edit', component: ReservationFormComponent }
+  ]
+}
     ]
   },
 

@@ -1,0 +1,62 @@
+<div class="reservation-form-page">
+  <h2>{{ isEditMode() ? 'Edit Reservation' : 'New Reservation' }}</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    @if (isEditMode()) {
+  <div class="readonly-info">
+    <p><strong>Guest:</strong> {{ readOnlyGuestName }}</p>
+    <p><strong>Hotel:</strong> {{ readOnlyHotelName }}</p>
+  </div>
+}
+    @if (!isEditMode()) {
+      <label>
+        Hotel
+        <select [(ngModel)]="selectedHotelId" name="hotel" (ngModelChange)="onHotelChange()" required>
+          <option [ngValue]="null" disabled>Choose Hotel</option>
+          @for (hotel of hotels(); track hotel.id) {
+            <option [ngValue]="hotel.id">{{ hotel.name }}</option>
+          }
+        </select>
+      </label>
+
+      @if (selectedHotelId) {
+        <label>
+          Rooms
+          <select multiple [(ngModel)]="selectedRoomIds" name="rooms" required>
+            @for (room of rooms(); track room.id) {
+              <option [ngValue]="room.id">{{ room.name }}</option>
+            }
+          </select>
+        </label>
+      }
+
+      <label>
+        Guest
+        <select [(ngModel)]="selectedGuestId" name="guest" required>
+          <option [ngValue]="null" disabled>Choose Guest</option>
+          @for (guest of guests(); track guest.id) {
+            <option [ngValue]="guest.id">{{ guest.firstName }} {{ guest.lastName }} — {{ guest.email }}</option>
+          }
+        </select>
+      </label>
+    }
+
+    <label>
+      Check-in
+      <input type="date" name="checkIn" [(ngModel)]="checkInDate" required>
+    </label>
+
+    <label>
+      Check-out
+      <input type="date" name="checkOut" [(ngModel)]="checkOutDate" required>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Uploading...' : (isEditMode() ? 'Save' : 'Create') }}
+    </button>
+  </form>
+</div>
