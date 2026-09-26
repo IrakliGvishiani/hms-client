@@ -2,9 +2,10 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
-import { ApiResponse, LoginRequest, LoginResponse } from '../models/auth.models';
+import { AdminRegistrationRequest, ApiResponse, ConfirmEmailRequest, LoginRequest, LoginResponse, ResetPasswordRequest } from '../models/auth.models';
 import { getRoleFromToken } from '../utils/jwt.util';
 import { ManagerRegistrationRequestDto } from '../models/manager.models';
+import { GuestRegistrationRequest } from '../models/guest.models';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,33 @@ export class AuthService {
     this.role.set(token ? getRoleFromToken(token) : null);
   }
 
+  registerGuest(
+  model: GuestRegistrationRequest
+): Observable<ApiResponse<number>> {
+  return this.http.post<ApiResponse<number>>(
+    `${this.apiUrl}/register-guest`,
+    model
+  );
+}
+
+confirmEmail(model: ConfirmEmailRequest): Observable<ApiResponse<any>> {
+  return this.http.post<ApiResponse<any>>(
+    `${this.apiUrl}/confirm-email`,
+    model
+  );
+}
+
+resendConfirmationCode(email: string): Observable<ApiResponse<any>> {
+  return this.http.post<ApiResponse<any>>(
+    `${this.apiUrl}/resend-confirmation-code`,
+    { email }
+  );
+}
+
+registerAdmin(model: AdminRegistrationRequest): Observable<ApiResponse<string>> {
+  return this.http.post<ApiResponse<string>>(`${this.apiUrl}/register-admin`, model);
+}
+
   login(credentials: LoginRequest): Observable<ApiResponse<LoginResponse>> {
     return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
@@ -43,6 +71,19 @@ export class AuthService {
     });
   }
 
+  forgotPassword(email: string): Observable<ApiResponse<any>> {
+  return this.http.post<ApiResponse<any>>(
+    `${this.apiUrl}/forgot-password`,
+    { email }
+  );
+}
+
+resetPassword(model: ResetPasswordRequest): Observable<ApiResponse<any>> {
+  return this.http.post<ApiResponse<any>>(
+    `${this.apiUrl}/reset-password`,
+    model
+  );
+}
   logout(): void {
     const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken) {

@@ -2,65 +2,64 @@
   <h2>Hotel Analytics</h2>
 
   @if (loading()) {
-    <p>Loading analytics...</p>
+    <p>Loading...</p>
   } @else if (errorMessage()) {
-    <div class="error-message">{{ errorMessage() }}</div>
-  } @else if (analytics()) {
-    
-    <div class="stats-grid">
-      <!-- Rooms Summary -->
-      <div class="stat-card">
-        <h4>Total Rooms</h4>
-        <p class="stat-value">{{ analytics()?.totalRooms }}</p>
-      </div>
+    <p class="error">{{ errorMessage() }}</p>
+  } @else {
+    @if (analytics(); as data) {
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total Rooms</span>
+          <span class="stat-value">{{ data.totalRooms }}</span>
+        </div>
 
-      <div class="stat-card success">
-        <h4>Available Rooms</h4>
-        <p class="stat-value">{{ analytics()?.availableRooms }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Available</span>
+          <span class="stat-value">{{ data.availableRooms }}</span>
+        </div>
 
-      <div class="stat-card warning">
-        <h4>Reserved Rooms</h4>
-        <p class="stat-value">{{ analytics()?.reservedRooms }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Reserved</span>
+          <span class="stat-value">{{ data.reservedRooms }}</span>
+        </div>
 
-      <div class="stat-card danger">
-        <h4>Occupied Rooms</h4>
-        <p class="stat-value">{{ analytics()?.occupiedRooms }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Occupied</span>
+          <span class="stat-value">{{ data.occupiedRooms }}</span>
+        </div>
 
-      <!-- Reservations Summary -->
-      <div class="stat-card">
-        <h4>Total Reservations</h4>
-        <p class="stat-value">{{ analytics()?.totalReservations }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Total Reservations</span>
+          <span class="stat-value">{{ data.totalReservations }}</span>
+        </div>
 
-      <div class="stat-card">
-        <h4>Active Reservations</h4>
-        <p class="stat-value">{{ analytics()?.activeReservations }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Active</span>
+          <span class="stat-value">{{ data.activeReservations }}</span>
+        </div>
 
-      <div class="stat-card">
-        <h4>Completed Reservations</h4>
-        <p class="stat-value">{{ analytics()?.completedReservations }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value">{{ data.completedReservations }}</span>
+        </div>
 
-      <div class="stat-card">
-        <h4>Cancelled Reservations</h4>
-        <p class="stat-value">{{ analytics()?.cancelledReservations }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Cancelled</span>
+          <span class="stat-value">{{ data.cancelledReservations }}</span>
+        </div>
 
-      <!-- Guests and Revenue -->
-      <div class="stat-card highlight">
-        <h4>Total Guests</h4>
-        <p class="stat-value">{{ analytics()?.totalGuests }}</p>
-      </div>
+        <div class="stat-card">
+          <span class="stat-label">Total Guests</span>
+          <span class="stat-value">{{ data.totalGuests }}</span>
+        </div>
 
-      <div class="stat-card highlight">
-        <h4>Total Revenue</h4>
-        <p class="stat-value">₾{{ analytics()?.totalRevenue }}</p>
+        <div class="stat-card highlight">
+          <span class="stat-label">Revenue</span>
+          <span class="stat-value">
+            {{ data.totalRevenue | number:'1.2-2' }} $
+          </span>
+        </div>
       </div>
-    </div>
-
+    }
   }
 </div>

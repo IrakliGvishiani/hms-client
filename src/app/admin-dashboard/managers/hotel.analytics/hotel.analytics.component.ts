@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ManagerService } from '../../../services/manager.service'; // შეამოწმე ფაილის გზა
-import { HotelAnalyticsDto } from '../../../models/manager.models'; // შეამოწმე ფაილის გზა
+import { ManagerService } from '../../../services/manager.service'; 
+import { HotelAnalyticsDto } from '../../../models/manager.models'; 
 
 @Component({
   selector: 'app-hotel-analytics',
@@ -27,7 +27,7 @@ export class HotelAnalyticsComponent implements OnInit {
 
     this.managerService.getHotelAnalytics().subscribe({
       next: (res) => {
-        // res.result ან res.data — გააჩნია შენს ApiResponse სტრუქტურას
+        
         this.analytics.set(res.result ?? res.result);
         this.loading.set(false);
       },

@@ -1,0 +1,13 @@
+.manager-profile-page {
+  max-width: 480px;
+
+  form {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  input { width: 100%; }
+  input:disabled { background: #f1f5f9; color: var(--text-muted); }
+}

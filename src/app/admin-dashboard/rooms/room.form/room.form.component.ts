@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RoomService } from '../../../services/room.service';
 import { RoomImage } from '../../../models/room.models';
+import { ManagerService } from '../../../services/manager.service';
 
 @Component({
   selector: 'app-room-form',
@@ -38,29 +39,31 @@ export class RoomFormComponent implements OnInit {
   constructor(
     private roomService: RoomService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private managerService: ManagerService
   ) {}
 
   ngOnInit(): void {
+  this.managerService.getOwnProfile().subscribe({
+    next: (res) => {
+      this.hotelId = res.result.hotelId;
 
-    const hotelIdParam = this.route.snapshot.paramMap.get('hotelId');
+      const roomIdParam = this.route.snapshot.paramMap.get('roomId');
 
-    if (!hotelIdParam) {
-      this.errorMessage.set('Hotel ID was not provided.');
-      return;
+      if (roomIdParam) {
+        this.isEditMode.set(true);
+        this.roomId = Number(roomIdParam);
+
+        this.loadRoom(this.roomId);
+      }
+    },
+    error: (err) => {
+      this.errorMessage.set(
+        err.error?.message ?? 'Unable to load manager profile.'
+      );
     }
-
-    this.hotelId = Number(hotelIdParam);
-
-    const roomIdParam = this.route.snapshot.paramMap.get('roomId');
-
-    if (roomIdParam) {
-      this.isEditMode.set(true);
-      this.roomId = Number(roomIdParam);
-
-      this.loadRoom(this.roomId);
-    }
-  }
+  });
+}
 
   loadRoom(id: number): void {
 

@@ -1,0 +1,38 @@
+<div class="hotel-list-page">
+  <div class="header-row">
+    <h2>Rooms</h2>
+    <a routerLink="/manager/rooms/new" class="btn-primary">+ New Room</a>
+  </div>
+
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (room of rooms(); track room.id) {
+          <tr>
+            <td>
+              @if (room.primaryImageUrl) {
+                <img [src]="room.primaryImageUrl" class="thumb">
+              }
+            </td>
+            <td>{{ room.name }}</td>
+            <td>{{ room.price }} $</td>
+            <td class="actions">
+              <a [routerLink]="['/manager/rooms', room.id, 'edit']">Edit</a>
+              <button (click)="onDelete(room.id)" class="btn-danger">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

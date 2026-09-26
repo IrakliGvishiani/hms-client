@@ -22,6 +22,10 @@
          routerLinkActive="active">
         Reservations
       </a>
+      <a routerLink="/admin/admins/new"
+         routerLinkActive="active">
+        Admin Register
+      </a>
     </nav>
 
     <div class="sidebar-bottom">
@@ -54,7 +58,7 @@
   </main>
 </div>
 
-<!-- Delete Modal -->
+
 @if (isDeleteModalOpen()) {
   <div class="modal-overlay" (click)="closeDeleteModal()">
     <div class="modal" (click)="$event.stopPropagation()">

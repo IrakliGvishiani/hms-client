@@ -1,0 +1,22 @@
+.admin-form-page {
+  max-width: 480px;
+
+  h2 {
+    margin: 0 0 20px;
+  }
+
+  form {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  input {
+    width: 100%;
+  }
+
+  button {
+    margin-top: 8px;
+  }
+}

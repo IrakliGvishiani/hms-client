@@ -1,0 +1,47 @@
+<div class="admin-form-page">
+  <h2>Register New Admin</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <label>
+      First Name
+      <input type="text" name="firstName" [(ngModel)]="firstName" required>
+    </label>
+
+    <label>
+      Last Name
+      <input type="text" name="lastName" [(ngModel)]="lastName" required>
+    </label>
+
+    <label>
+      Personal Number
+      <input type="text" name="personalNumber" [(ngModel)]="personalNumber" maxlength="11" required>
+    </label>
+
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" required>
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" [(ngModel)]="password" required>
+    </label>
+
+    <label>
+      Phone Number
+      <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber" placeholder="+995XXXXXXXXX" required>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="success">{{ successMessage() }}</p>
+    }
+
+    <button style="background-color: #2563EB;color: white" type="submit" [disabled]="loading()">
+      {{ loading() ? 'Creating...' : 'Create' }}
+    </button>
+  </form>
+</div>

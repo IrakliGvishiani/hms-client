@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../models/auth.models'; // ან შენი CommonResponse / ApiResponse მოდელი
+import { ApiResponse } from '../models/auth.models'; 
 import { 
   ManagerListForGettingDto, 
   ManagerForUpdatingDto, 
-  HotelAnalyticsDto 
+  HotelAnalyticsDto, 
+  ManagerProfile
 } from '../models/manager.models';
 
 @Injectable({
@@ -26,6 +27,9 @@ export class ManagerService {
     return this.http.put<ApiResponse<boolean>>(this.apiUrl, model);
   }
 
+  getOwnProfile(): Observable<ApiResponse<ManagerProfile>> {
+  return this.http.get<ApiResponse<ManagerProfile>>(`${this.apiUrl}/me`);
+}
  
   delete(id: number): Observable<ApiResponse<null>> {
     return this.http.delete<ApiResponse<null>>(`${this.apiUrl}/${id}`);
@@ -33,6 +37,6 @@ export class ManagerService {
 
   
   getHotelAnalytics(): Observable<ApiResponse<HotelAnalyticsDto>> {
-    return this.http.get<ApiResponse<HotelAnalyticsDto>>(`${this.apiUrl}/hotel-analytics`);
+    return this.http.get<ApiResponse<HotelAnalyticsDto>>(`${this.apiUrl}/analytics`);
   }
 }

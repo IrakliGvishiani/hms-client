@@ -9,6 +9,16 @@ export interface ManagerListForGettingDto {
   hotelName: string;
 }
 
+export interface ManagerProfile {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  personalNumber: string;
+  phoneNumber: string;
+  hotelName: string;
+  hotelId: number;
+}
 export interface ManagerForUpdatingDto {
   id: number;
   firstName: string;

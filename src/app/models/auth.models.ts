@@ -16,6 +16,26 @@ export interface ApiResponse<T> {
 }
 
 export interface LoginRequest {
-  userName: string; // რეალურად email-ს ჩაწერთ აქ
+  userName: string; // EMAIL
   password: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+}
+
+export interface ConfirmEmailRequest {
+  email: string;
+  code: string;
+}
+
+export interface AdminRegistrationRequest {
+  firstName: string;
+  lastName: string;
+  personalNumber: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
 }

@@ -6,3 +6,12 @@ export interface Guest {
   personalNumber: string;
   phoneNumber: string;
 }
+
+export interface GuestRegistrationRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  personalNumber: string;
+  phoneNumber: string;
+}

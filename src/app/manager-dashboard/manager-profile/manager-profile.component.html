@@ -1,0 +1,50 @@
+<div class="manager-profile-page">
+  <h2>My Profile</h2>
+
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else {
+    <form (ngSubmit)="onSubmit()">
+      <label>
+        Email
+        <input type="email" [value]="email" disabled>
+      </label>
+
+      <label>
+        Hotel
+        <input type="text" [value]="hotelName" disabled>
+      </label>
+
+      <label>
+        First Name
+        <input type="text" name="firstName" [(ngModel)]="firstName" required>
+      </label>
+
+      <label>
+        Last Name
+        <input type="text" name="lastName" [(ngModel)]="lastName" required>
+      </label>
+
+      <label>
+        Personal Number
+        <input type="text" name="personalNumber" [(ngModel)]="personalNumber" maxlength="11" required>
+      </label>
+
+      <label>
+        Phone Number
+        <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber" placeholder="+995XXXXXXXXX" required>
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Saving...' : 'Save' }}
+      </button>
+    </form>
+  }
+</div>

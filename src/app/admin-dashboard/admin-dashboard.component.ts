@@ -16,7 +16,7 @@ export class AdminDashboardComponent {
   isDeleteModalOpen = signal(false);
   loading = signal(false);
   isLogoutModalOpen = signal(false);
-  // 🔴 გასწორდა ტიპიზაცია: string | null
+ 
   errorMessage = signal(null);
 
   constructor(
