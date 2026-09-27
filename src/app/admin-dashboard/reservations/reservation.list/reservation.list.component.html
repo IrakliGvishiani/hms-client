@@ -1,22 +1,26 @@
 <div class="reservation-list-page">
   <div class="header-row">
     <h2>Reservations</h2>
-    <a routerLink="/admin/reservations/new" class="btn-primary">+ New Reservation</a>
+    <button type="button" (click)="newReservation()" class="btn-primary">
+  + New Reservation
+</button>
   </div>
 
   <div class="filters">
+  @if (!isManager()) {
     <select [(ngModel)]="selectedHotelId" (ngModelChange)="onFilterChange()">
       <option [ngValue]="null">All Hotel</option>
       @for (hotel of hotels(); track hotel.id) {
         <option [ngValue]="hotel.id">{{ hotel.name }}</option>
       }
     </select>
+  }
 
-    <label>
-      <input type="checkbox" [(ngModel)]="activeOnly" (ngModelChange)="onFilterChange()">
-      Only Active
-    </label>
-  </div>
+  <label>
+    <input type="checkbox" [(ngModel)]="activeOnly" (ngModelChange)="onFilterChange()">
+    Only Active
+  </label>
+</div>
 
   @if (loading()) {
     <p>Loading...</p>
@@ -41,7 +45,14 @@
             <td>{{ r.checkOutDate | date:'yyyy-MM-dd' }}</td>
             <td>{{ statusLabel(r.status) }}</td>
             <td class="actions">
-              <a [routerLink]="['/admin/reservations', r.id, 'edit']">Edit</a>
+              <a
+              [routerLink]="[
+                isManager() ? '/manager/reservations' : '/admin/reservations',
+                r.id,
+                'edit'
+              ]">
+              Edit
+            </a>
               @if (r.status !== ReservationStatus.Cancelled) {
                 <button (click)="onCancel(r.id)" class="btn-danger">Cancel</button>
               }

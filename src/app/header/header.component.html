@@ -1,1 +1,54 @@
-<p>header works!</p>
+<header class="site-header">
+  <a routerLink="/" class="logo">HMS</a>
+
+  <nav class="nav-links">
+    <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active">
+      Hotels
+    </a>
+  </nav>
+
+  <div class="auth-links">
+    @if (authService.isAuthorized()) {
+      @if (authService.role() === 'Admin' || authService.role() === 'Manager') {
+        <a [routerLink]="dashboardLink()" class="btn-secondary">Panel</a>
+      }
+      <button (click)="onLogout()" class="btn-secondary">Log Out</button>
+    } @else {
+      <a routerLink="/login" class="btn-secondary">Login</a>
+      <a routerLink="/register" class="btn-primary">Register</a>
+    }
+
+    @if (authService.isAuthorized() && authService.role() === 'Guest') {
+  <a routerLink="/my-reservations" class="btn-secondary">My Reservations</a>
+}
+  </div>
+  
+</header>
+
+@if (isLogoutModalOpen()) {
+  <div class="modal-overlay" (click)="closeLogoutModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <h2 class="modal-title">Logout</h2>
+
+      <p class="modal-text">
+        Are you sure you want to logout?
+      </p>
+
+      <div class="modal-actions">
+        <button
+          class="btn btn-cancel"
+          (click)="closeLogoutModal()">
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-danger"
+          (click)="confirmLogout()">
+          Logout
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

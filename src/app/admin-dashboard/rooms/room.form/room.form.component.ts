@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../../../services/room.service';
 import { RoomImage } from '../../../models/room.models';
 import { ManagerService } from '../../../services/manager.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-room-form',
@@ -40,29 +41,65 @@ export class RoomFormComponent implements OnInit {
     private roomService: RoomService,
     private route: ActivatedRoute,
     private router: Router,
-    private managerService: ManagerService
+    private managerService: ManagerService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-  this.managerService.getOwnProfile().subscribe({
-    next: (res) => {
-      this.hotelId = res.result.hotelId;
+  const roomIdParam = this.route.snapshot.paramMap.get('roomId');
 
-      const roomIdParam = this.route.snapshot.paramMap.get('roomId');
+  if (roomIdParam) {
+    this.isEditMode.set(true);
+    this.roomId = Number(roomIdParam);
+  }
 
-      if (roomIdParam) {
-        this.isEditMode.set(true);
-        this.roomId = Number(roomIdParam);
+  if (this.authService.role() === 'Manager') {
 
-        this.loadRoom(this.roomId);
+    this.managerService.getOwnProfile().subscribe({
+      next: (res) => {
+        this.hotelId = res.result.hotelId;
+
+        if (this.isEditMode() && this.roomId) {
+          this.loadRoom(this.roomId);
+        }
+      },
+      error: (err) => {
+        this.errorMessage.set(
+          err.error?.message ?? 'Unable to load manager profile.'
+        );
       }
-    },
-    error: (err) => {
-      this.errorMessage.set(
-        err.error?.message ?? 'Unable to load manager profile.'
-      );
+    });
+
+  } else {
+
+    const hotelId = this.getHotelIdFromRoute();
+
+    if (!hotelId) {
+      this.errorMessage.set('Hotel ID was not provided.');
+      return;
     }
-  });
+
+    this.hotelId = hotelId;
+
+    if (this.isEditMode() && this.roomId) {
+      this.loadRoom(this.roomId);
+    }
+  }
+}
+private getHotelIdFromRoute(): number | null {
+  let currentRoute: ActivatedRoute | null = this.route;
+
+  while (currentRoute) {
+    const hotelId = currentRoute.snapshot.paramMap.get('hotelId');
+
+    if (hotelId) {
+      return Number(hotelId);
+    }
+
+    currentRoute = currentRoute.parent;
+  }
+
+  return null;
 }
 
   loadRoom(id: number): void {
@@ -203,13 +240,28 @@ export class RoomFormComponent implements OnInit {
   }
 
   goBack(): void {
-  this.router.navigate([
-    '/admin/hotels',
-    this.hotelId,
-    'rooms'
-  ]);
+  if (this.authService.role() === 'Manager') {
+    this.router.navigate(['/manager/rooms']);
+  } else {
+    this.router.navigate([
+      '/admin/hotels',
+      this.hotelId,
+      'rooms'
+    ]);
+  }
 }
 
+private navigateToRooms(): void {
+  if (this.authService.role() === 'Manager') {
+    this.router.navigate(['/manager/rooms']);
+  } else {
+    this.router.navigate([
+      '/admin/hotels',
+      this.hotelId,
+      'rooms'
+    ]);
+  }
+}
   onSubmit(): void {
 
     this.errorMessage.set(null);
@@ -257,11 +309,7 @@ export class RoomFormComponent implements OnInit {
 
           this.loading.set(false);
 
-          this.router.navigate([
-            '/admin/hotels',
-            this.hotelId,
-            'rooms'
-          ]);
+          this.navigateToRooms();
         },
 
         error: (err) => {
@@ -288,11 +336,7 @@ export class RoomFormComponent implements OnInit {
 
           this.loading.set(false);
 
-          this.router.navigate([
-            '/admin/hotels',
-            this.hotelId,
-            'rooms'
-          ]);
+          this.navigateToRooms();
         },
 
         error: (err) => {

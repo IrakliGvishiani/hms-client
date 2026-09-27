@@ -1,0 +1,62 @@
+<div class="room-detail-page">
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else {
+    @if (room(); as r) {
+      <button class="back-link" (click)="goBack()">← Back to Hotel</button>
+
+      <div class="carousel">
+        @if (r.images.length > 0) {
+          <div class="carousel-main">
+            <button class="carousel-arrow left" (click)="prevImage()">‹</button>
+            <img [src]="r.images[currentImageIndex()].url" [alt]="r.name">
+            <button class="carousel-arrow right" (click)="nextImage()">›</button>
+          </div>
+
+          <div class="carousel-thumbs">
+            @for (img of r.images; track img.id; let i = $index) {
+              <img [src]="img.url"
+                   [class.active]="i === currentImageIndex()"
+                   (click)="goToImage(i)">
+            }
+          </div>
+        } @else {
+          <div class="no-image">No Image</div>
+        }
+      </div>
+
+      <div class="room-info">
+        <h1>{{ r.name }}</h1>
+        <p class="price">{{ r.price }} $ / Night</p>
+      </div>
+
+      <section class="booking-section">
+        <h2>Create Reservation</h2>
+
+        <div class="booking-form">
+          <label>
+            Check-in
+            <input type="date" [(ngModel)]="checkInDate">
+          </label>
+
+          <label>
+            Check-out
+            <input type="date" [(ngModel)]="checkOutDate">
+          </label>
+
+          <button (click)="onBook()" [disabled]="bookingLoading()" class="btn-primary">
+            {{ bookingLoading() ? 'Loading...' : 'Book' }}
+          </button>
+        </div>
+
+        @if (bookingError()) {
+          <p class="error">{{ bookingError() }}</p>
+        }
+
+        @if (bookingSuccess()) {
+          <p class="success">Reservation Created Successfully!</p>
+        }
+      </section>
+    }
+  }
+</div>

@@ -9,6 +9,8 @@ import { GuestService } from '../../../services/guest.service';
 import { Hotel } from '../../../models/hotel.models';
 import { Room } from '../../../models/room.models';
 import { Guest } from '../../../models/guest.models';
+import { AuthService } from '../../../services/auth.service';
+import { ManagerService } from '../../../services/manager.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -20,6 +22,9 @@ import { Guest } from '../../../models/guest.models';
 export class ReservationFormComponent implements OnInit {
   isEditMode = signal(false);
   reservationId: number | null = null;
+  isManager(): boolean {
+  return this.authService.role() === 'Manager';
+}
 
   hotels = signal<Hotel[]>([]);
   rooms = signal<Room[]>([]);
@@ -37,8 +42,10 @@ export class ReservationFormComponent implements OnInit {
   constructor(
     private reservationService: ReservationService,
     private hotelService: HotelService,
+    private managerService: ManagerService,
     private roomService: RoomService,
     private guestService: GuestService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -50,7 +57,7 @@ readOnlyHotelName = '';
 
   this.reservationService.getById(id).subscribe({
     next: (res) => {
-      this.checkInDate = res.result.checkInDate.substring(0, 10); // YYYY-MM-DD ფორმატისთვის <input type="date">
+      this.checkInDate = res.result.checkInDate.substring(0, 10);
       this.checkOutDate = res.result.checkOutDate.substring(0, 10);
       this.readOnlyGuestName = res.result.guestName;
       this.readOnlyHotelName = res.result.hotelName;
@@ -71,15 +78,43 @@ readOnlyHotelName = '';
     this.reservationId = Number(idParam);
     this.loadReservation(this.reservationId);
   } else {
-    this.hotelService.getList({ pageNumber: 1, pageSize: 100 }).subscribe({
-      next: (res) => this.hotels.set(res.result.items)
-    });
 
     this.guestService.getAll().subscribe({
       next: (res) => this.guests.set(res.result)
     });
+
+    if (this.authService.role() === 'Manager') {
+
+      this.managerService.getOwnProfile().subscribe({
+        next: (res) => {
+          this.selectedHotelId = res.result.hotelId;
+          this.onHotelChange();
+        }
+      });
+
+    } else {
+
+      this.hotelService.getList({
+        pageNumber: 1,
+        pageSize: 100
+      }).subscribe({
+        next: (res) => this.hotels.set(res.result.items)
+      });
+
+    }
   }
 }
+
+
+
+private navigateToReservations(): void {
+  if (this.authService.role() === 'Manager') {
+    this.router.navigate(['/manager/reservations']);
+  } else {
+    this.router.navigate(['/admin/reservations']);
+  }
+}
+
   onHotelChange(): void {
     this.selectedRoomIds = [];
     if (!this.selectedHotelId) {
@@ -104,7 +139,7 @@ readOnlyHotelName = '';
       }).subscribe({
         next: () => {
           this.loading.set(false);
-          this.router.navigate(['/admin/reservations']);
+          this.router.navigate([this.getBackRoute()]);
         },
         error: (err) => {
           this.loading.set(false);
@@ -131,7 +166,7 @@ readOnlyHotelName = '';
       }).subscribe({
         next: () => {
           this.loading.set(false);
-          this.router.navigate(['/admin/reservations']);
+          this.navigateToReservations();
         },
         error: (err) => {
           this.loading.set(false);
@@ -140,4 +175,11 @@ readOnlyHotelName = '';
       });
     }
   }
+
+  private getBackRoute(): string {
+  const role = this.authService.role();
+  if (role === 'Admin') return '/admin/reservations';
+  if (role === 'Manager') return '/manager/reservations';
+  return '/my-reservations';
+}
 }

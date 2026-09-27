@@ -1,0 +1,48 @@
+<div class="hotel-detail-page">
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else {
+    @if (hotel(); as h) {
+      <div class="hotel-header">
+        @if (h.primaryImageUrl) {
+          <img [src]="h.primaryImageUrl" [alt]="h.name" class="hero-image">
+        }
+
+        <div class="hotel-info">
+          <h1>{{ h.name }}</h1>
+          <p class="location">{{ h.city }}, {{ h.country }} — {{ h.address }}</p>
+          <div class="rating">{{ h.rating }} ★</div>
+        </div>
+      </div>
+
+      @if (h.images.length > 1) {
+        <div class="image-gallery">
+          @for (img of h.images; track img.id) {
+            <img [src]="img.url" [alt]="h.name">
+          }
+        </div>
+      }
+
+      <section class="rooms-section">
+        <h2>Rooms</h2>
+
+        <div class="room-grid">
+          @for (room of rooms(); track room.id) {
+            <div style="cursor: pointer;" class="room-card" (click)="viewRoom(room.id)">
+              @if (room.primaryImageUrl) {
+                <img [src]="room.primaryImageUrl" [alt]="room.name">
+              }
+
+              <div class="room-card-body">
+                <h3>{{ room.name }}</h3>
+                <p class="price">{{ room.price }} $ / Night</p>
+              </div>
+            </div>
+          } @empty {
+            <p>Couldn't find rooms</p>
+          }
+        </div>
+      </section>
+    }
+  }
+</div>

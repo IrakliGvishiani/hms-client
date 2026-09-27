@@ -1,0 +1,39 @@
+<div class="my-reservations-page">
+  <h2>My Reservations</h2>
+
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else {
+    @if (reservations().length === 0) {
+      <p>Couldn't find reservationsა</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Hotel</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of reservations(); track r.id) {
+            <tr>
+              <td>{{ r.hotelName }}</td>
+              <td>{{ r.checkInDate | date:'yyyy-MM-dd' }}</td>
+              <td>{{ r.checkOutDate | date:'yyyy-MM-dd' }}</td>
+              <td>{{ statusLabel(r.status) }}</td>
+              <td class="actions">
+                @if (r.status !== ReservationStatus.Cancelled) {
+                  <a [routerLink]="['/my-reservations', r.id, 'edit']">Edit</a>
+                  <button (click)="onCancel(r.id)" class="btn-danger">Cancel</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  }
+</div>

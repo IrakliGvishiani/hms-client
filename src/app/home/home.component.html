@@ -1,1 +1,45 @@
-<p>home works!</p>
+<div class="home-page">
+  <section class="hero">
+    <h1>Find Your Hotel</h1>
+    <p>Search For our Partner Hotels and Book Online</p>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search by name..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()">
+      <button (click)="onSearch()" class="btn-primary">Find</button>
+    </div>
+  </section>
+
+  @if (loading()) {
+    <p class="loading-text">Loading...</p>
+  } @else {
+    <div class="hotel-grid">
+      @for (hotel of hotels(); track hotel.id) {
+        <div class="hotel-card" (click)="viewDetails(hotel.id)">
+          @if (hotel.primaryImageUrl) {
+            <img [src]="hotel.primaryImageUrl" [alt]="hotel.name">
+          } @else {
+            <div class="no-image">Photo Wasn't Found</div>
+          }
+
+          <div class="hotel-card-body">
+            <h3>{{ hotel.name }}</h3>
+            <p class="location">{{ hotel.city }}, {{ hotel.country }}</p>
+            <div class="rating">{{ hotel.rating }} ★</div>
+          </div>
+        </div>
+      } @empty {
+        <p>Failed to Find Hotel</p>
+      }
+    </div>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="pageNumber() === 1">←</button>
+      <span>Page {{ pageNumber() }}</span>
+      <button (click)="nextPage()" [disabled]="pageNumber() * pageSize >= totalCount()">→</button>
+    </div>
+  }
+</div>

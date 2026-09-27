@@ -1,7 +1,7 @@
 export enum ReservationStatus {
   Reserved = 0,
-  CheckedIn = 1,
-  CheckedOut = 2,
+  Active = 1,
+  Completed = 2,
   Cancelled = 3
 }
 

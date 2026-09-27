@@ -1,11 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReservationService } from '../../../services/reservation.service';
 import { HotelService } from '../../../services/hotel.service';
 import { ReservationForGettingDto, ReservationStatus } from '../../../models/reservation.models';
 import { Hotel } from '../../../models/hotel.models';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-reservation-list',
@@ -26,8 +27,26 @@ export class ReservationListComponent implements OnInit {
 
   constructor(
     private reservationService: ReservationService,
-    private hotelService: HotelService
+    private hotelService: HotelService,
+    private authService: AuthService,
+    private router: Router
   ) {}
+
+  isManager(): boolean {
+  return this.router.url.startsWith('/manager');
+}
+
+newReservation(): void {
+  const route = this.isManager()
+    ? '/manager/reservations/new'
+    : '/admin/reservations/new';
+
+  console.log('Navigating to:', route);
+
+  this.router.navigateByUrl(route).then(success => {
+    console.log('Navigation success:', success);
+  });
+}
 
   ngOnInit(): void {
     this.hotelService.getList({ pageNumber: 1, pageSize: 100 }).subscribe({

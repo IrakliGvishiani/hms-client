@@ -25,6 +25,10 @@ import { AdminFormComponent } from './admin-dashboard/admin.form/admin.form.comp
 import { ManagerRoomsComponent } from './manager-dashboard/manager-rooms/manager-rooms.component';
 import { ManagerDashboardComponent } from './manager-dashboard/manager-dashboard.component';
 import { ManagerProfileComponent } from './manager-dashboard/manager-profile/manager-profile.component';
+import { authGuard } from './guards/auth.guard';
+import { HotelDetailComponent } from './hotel-details/hotel-details.component';
+import { RoomDetailComponent } from './room-details/room-details.component';
+import { MyReservationsComponent } from './my-reservations/my-reservations.component';
 
 export const routes: Routes = [
   
@@ -36,11 +40,24 @@ export const routes: Routes = [
         path: '',
         component: HomeComponent
       },
+      { path: 'hotels/:id', 
+        component: HotelDetailComponent,
+         canActivate: [authGuard] },
+         { path: 'rooms/:id',
+           component: RoomDetailComponent,
+            canActivate: [authGuard] },
       {
         path: 'login',
         component: LoginComponent,
         canActivate: [guestGuard]
       },
+      { path: 'my-reservations',
+         component: MyReservationsComponent,
+          canActivate: [authGuard] },
+      {      
+       path: 'my-reservations/:id/edit',
+        component: ReservationFormComponent,
+       canActivate: [authGuard] },
       {
       path: 'forgot-password',
       component: ForgotPasswordComponent
@@ -128,7 +145,14 @@ export const routes: Routes = [
         { path: ':roomId/edit', component: RoomFormComponent }
       ]
     },
-    { path: 'reservations', component: ReservationListComponent },
+    {
+  path: 'reservations',
+  children: [
+    { path: '', component: ReservationListComponent },
+    { path: 'new', component: ReservationFormComponent },
+    { path: ':id/edit', component: ReservationFormComponent }
+  ]
+},
     { path: 'profile', component: ManagerProfileComponent }
   ]
 }
