@@ -13,6 +13,5 @@ export function getRoleFromToken(token: string): string | null {
   if (!payload) return null;
 
   const role = payload[ROLE_CLAIM] ?? payload['role'];
-  // roles შეიძლება იყოს ერთი string ან string[] (თუ მომავალში მრავალ როლს დაამატებთ)
   return Array.isArray(role) ? role[0] : role;
 }

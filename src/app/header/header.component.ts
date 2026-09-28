@@ -33,6 +33,7 @@ closeLogoutModal(): void {
 }
 
 confirmLogout(): void {
+  this.isLogoutModalOpen.set(false);
   this.authService.logout();
   this.router.navigate(['/login']);
 }

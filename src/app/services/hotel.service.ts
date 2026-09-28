@@ -8,7 +8,7 @@ import { Hotel, HotelDetail, HotelForUpdating, PagedRequest, PagedResponse } fro
   providedIn: 'root'
 })
 export class HotelService {
-  private readonly apiUrl = 'http://localhost:8080/api/hotel';
+  private readonly apiUrl = '/api/hotel';
 
   constructor(private http: HttpClient) {}
 

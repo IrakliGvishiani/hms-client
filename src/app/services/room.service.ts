@@ -13,7 +13,7 @@ import {
 })
 export class RoomService {
 
-  private readonly apiUrl = 'http://localhost:8080/api/room';
+  private readonly apiUrl = '/api/room';
 
   constructor(private http: HttpClient) {}
 

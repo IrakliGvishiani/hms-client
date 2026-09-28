@@ -10,7 +10,7 @@ export class AdminService {
 
   constructor(private http : HttpClient) { }
 
-   private readonly apiUrl = 'http://localhost:8080/api/admin';
+   private readonly apiUrl = '/api/admin';
 
   deleteAccount(): Observable<ApiResponse<string>> {
   return this.http.delete<ApiResponse<string>>(

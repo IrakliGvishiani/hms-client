@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../services/room.service';
 import { ReservationService } from '../services/reservation.service';
 import { RoomDetails } from '../models/room.models';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-room-detail',
@@ -30,7 +31,8 @@ export class RoomDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private roomService: RoomService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

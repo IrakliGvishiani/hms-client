@@ -13,7 +13,7 @@ import {
   providedIn: 'root'
 })
 export class ManagerService {
-  private readonly apiUrl = 'http://localhost:8080/api/manager';
+  private readonly apiUrl = '/api/manager';
 
   constructor(private http: HttpClient) {}
 

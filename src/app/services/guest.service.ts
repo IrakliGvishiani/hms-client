@@ -8,7 +8,7 @@ import { Guest } from '../models/guest.models';
   providedIn: 'root'
 })
 export class GuestService {
-  private readonly apiUrl = 'http://localhost:8080/api/guest';
+  private readonly apiUrl = '/api/guest';
 
   constructor(private http: HttpClient) {}
 

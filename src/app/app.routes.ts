@@ -1,86 +1,59 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
 import { guestGuard, roleGuard } from './guards/role.guard.guard';
-
-import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { DashboardHomeComponent } from './admin-dashboard/dashboard-home/dashboard-home.component';
-
-import { HotelListComponent } from './admin-dashboard/hotel.list/hotel.list.component';
-import { RoomListComponent } from './admin-dashboard/rooms/room-list/room-list.component';
-import { HotelFormComponent } from './admin-dashboard/hotel.form/hotel.form.component';
-import { RoomFormComponent } from './admin-dashboard/rooms/room.form/room.form.component';
-
-
-import { ManagerListComponent } from './admin-dashboard/managers/manager.list/manager.list.component';
-import { HotelAnalyticsComponent } from './admin-dashboard/managers/hotel.analytics/hotel.analytics.component';
-import { ReservationListComponent } from './admin-dashboard/reservations/reservation.list/reservation.list.component';
-import { ReservationFormComponent } from './admin-dashboard/reservations/reservation.form/reservation.form.component';
-import { PublicLayoutComponent } from './public-layout/public-layout.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { RegisterComponent } from './register/register.component';
-import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
-import { AdminFormComponent } from './admin-dashboard/admin.form/admin.form.component';
-import { ManagerRoomsComponent } from './manager-dashboard/manager-rooms/manager-rooms.component';
-import { ManagerDashboardComponent } from './manager-dashboard/manager-dashboard.component';
-import { ManagerProfileComponent } from './manager-dashboard/manager-profile/manager-profile.component';
 import { authGuard } from './guards/auth.guard';
-import { HotelDetailComponent } from './hotel-details/hotel-details.component';
-import { RoomDetailComponent } from './room-details/room-details.component';
-import { MyReservationsComponent } from './my-reservations/my-reservations.component';
+
 
 export const routes: Routes = [
   
   {
     path: '',
-    component: PublicLayoutComponent,
+    loadComponent: () => import('./public-layout/public-layout.component').then(m => m.PublicLayoutComponent),
     children: [
       {
         path: '',
-        component: HomeComponent
+        loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)
       },
       { path: 'hotels/:id', 
-        component: HotelDetailComponent,
+        loadComponent: () => import('./hotel-details/hotel-details.component').then(m => m.HotelDetailComponent),
          canActivate: [authGuard] },
          { path: 'rooms/:id',
-           component: RoomDetailComponent,
+           loadComponent: () => import('./room-details/room-details.component').then(m => m.RoomDetailComponent),
             canActivate: [authGuard] },
       {
         path: 'login',
-        component: LoginComponent,
+        loadComponent: () => import('./login/login.component').then(m => m.LoginComponent),
         canActivate: [guestGuard]
       },
       { path: 'my-reservations',
-         component: MyReservationsComponent,
-          canActivate: [authGuard] },
+         loadComponent: () => import('./my-reservations/my-reservations.component').then(m => m.MyReservationsComponent),
+          canActivate: [roleGuard(['Guest'])]},
       {      
        path: 'my-reservations/:id/edit',
-        component: ReservationFormComponent,
-       canActivate: [authGuard] },
+        loadComponent: () => import('./admin-dashboard/reservations/reservation.form/reservation.form.component').then(m => m.ReservationFormComponent),
+       canActivate: [roleGuard(['Guest'])] },
       {
       path: 'forgot-password',
-      component: ForgotPasswordComponent
+      loadComponent: () => import('./forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
       },
       {
       path: 'reset-password',
-      component: ResetPasswordComponent
+      loadComponent: () => import('./reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
       },
       {
       path: 'register',
-      component: RegisterComponent,
+      loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent),
       canActivate: [guestGuard]
       },
       {
       path: 'confirm-email',
-      component: ConfirmEmailComponent
+      loadComponent: () => import('./confirm-email/confirm-email.component').then(m => m.ConfirmEmailComponent)
       },
     ]
   },
 
   {
     path: 'admin',
-    component: AdminDashboardComponent,
+    loadComponent: () => import('./admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
     canActivate: [roleGuard(['Admin'])],
     children: [
       {
@@ -90,40 +63,40 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        component: DashboardHomeComponent
+        loadComponent: () => import('./admin-dashboard/dashboard-home/dashboard-home.component').then(m => m.DashboardHomeComponent)
       },
       {
         path: 'hotels',
         children: [
-          { path: '', component: HotelListComponent },
-          { path: 'new', component: HotelFormComponent },
-          { path: ':id/edit', component: HotelFormComponent }
+          { path: '', loadComponent: () => import('./admin-dashboard/hotel.list/hotel.list.component').then(m => m.HotelListComponent) },
+          { path: 'new', loadComponent: () => import('./admin-dashboard/hotel.form/hotel.form.component').then(m => m.HotelFormComponent) },
+          { path: ':id/edit', loadComponent: () => import('./admin-dashboard/hotel.form/hotel.form.component').then(m => m.HotelFormComponent) }
         ]
       },
       {
         path: 'hotels/:hotelId/rooms',
         children: [
-          { path: '', component: RoomListComponent },
-          { path: 'new', component: RoomFormComponent },
-          { path: ':roomId/edit', component: RoomFormComponent }
+          { path: '', loadComponent: () => import('./admin-dashboard/rooms/room-list/room-list.component').then(m => m.RoomListComponent) },
+          { path: 'new', loadComponent: () => import('./admin-dashboard/rooms/room.form/room.form.component').then(m => m.RoomFormComponent) },
+          { path: ':roomId/edit', loadComponent: () => import('./admin-dashboard/rooms/room.form/room.form.component').then(m => m.RoomFormComponent)  }
         ]
       },
       
       {
         path: 'managers',
-        component: ManagerListComponent
+        loadComponent: () => import('./admin-dashboard/managers/manager.list/manager.list.component').then(m => m.ManagerListComponent)
       },
         { 
         path: 'admins/new',
-         component: AdminFormComponent 
+         loadComponent: () => import('./admin-dashboard/admin.form/admin.form.component').then(m => m.AdminFormComponent) 
         },
 
       {
   path: 'reservations',
   children: [
-    { path: '', component: ReservationListComponent },
-    { path: 'new', component: ReservationFormComponent },
-    { path: ':id/edit', component: ReservationFormComponent }
+    { path: '', loadComponent: () => import('./admin-dashboard/reservations/reservation.list/reservation.list.component').then(m => m.ReservationListComponent) },
+    { path: 'new', loadComponent: () => import('./admin-dashboard/reservations/reservation.form/reservation.form.component').then(m => m.ReservationFormComponent) },
+    { path: ':id/edit', loadComponent: () => import('./admin-dashboard/reservations/reservation.form/reservation.form.component').then(m => m.ReservationFormComponent) }
   ]
 }
     ]
@@ -132,28 +105,35 @@ export const routes: Routes = [
   
  {
   path: 'manager',
-  component: ManagerDashboardComponent,
-  canActivate: [roleGuard(['Manager', 'Admin'])],
+  loadComponent: () => import('./manager-dashboard/manager-dashboard.component').then(m => m.ManagerDashboardComponent),
+  canActivate: [roleGuard(['Manager', 'Admin'])], 
   children: [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardHomeComponent },
+    { path: 'dashboard', loadComponent: () => import('./admin-dashboard/dashboard-home/dashboard-home.component').then(m => m.DashboardHomeComponent) },
     {
       path: 'rooms',
+      canActivate: [roleGuard(['Manager'])], 
       children: [
-        { path: '', component: ManagerRoomsComponent },
-        { path: 'new', component: RoomFormComponent },
-        { path: ':roomId/edit', component: RoomFormComponent }
+        { path: '', loadComponent: () => import('./manager-dashboard/manager-rooms/manager-rooms.component').then(m => m.ManagerRoomsComponent) },
+        { path: 'new', loadComponent: () => import('./admin-dashboard/rooms/room.form/room.form.component').then(m => m.RoomFormComponent) },
+        { path: ':roomId/edit',  loadComponent: () => import('./admin-dashboard/rooms/room.form/room.form.component').then(m => m.RoomFormComponent) }
       ]
     },
     {
-  path: 'reservations',
-  children: [
-    { path: '', component: ReservationListComponent },
-    { path: 'new', component: ReservationFormComponent },
-    { path: ':id/edit', component: ReservationFormComponent }
+      path: 'reservations',
+      canActivate: [roleGuard(['Manager'])],
+      children: [
+        { path: '', loadComponent: () => import('./admin-dashboard/reservations/reservation.list/reservation.list.component').then(m => m.ReservationListComponent) },
+        { path: 'new', loadComponent: () => import('./admin-dashboard/reservations/reservation.form/reservation.form.component').then(m => m.ReservationFormComponent) },
+        { path: ':id/edit', loadComponent: () => import('./admin-dashboard/reservations/reservation.form/reservation.form.component').then(m => m.ReservationFormComponent) }
+      ]
+    },
+    { path: 'profile', canActivate: [roleGuard(['Manager'])], loadComponent: () => import('./manager-dashboard/manager-profile/manager-profile.component').then(m => m.ManagerProfileComponent) }
   ]
 },
-    { path: 'profile', component: ManagerProfileComponent }
-  ]
+
+{
+  path: '**',
+  loadComponent: () => import('./not-found/not-found.component').then(m => m.NotFoundComponent)
 }
 ];

@@ -11,7 +11,7 @@ import { HotelAnalytics } from '../models/analytics';
 export class AnalyticsService {
 
   private readonly apiUrl =
-    'http://localhost:8080/api/manager';
+    '/api/manager';
 
   constructor(private http: HttpClient) {}
 

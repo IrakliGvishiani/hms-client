@@ -30,8 +30,9 @@
         <p class="price">{{ r.price }} $ / Night</p>
       </div>
 
-      <section class="booking-section">
-        <h2>Create Reservation</h2>
+      @if (authService.role() === 'Guest') {
+  <section class="booking-section">
+    <h2>Create Reservation</h2>
 
         <div class="booking-form">
           <label>
@@ -56,7 +57,14 @@
         @if (bookingSuccess()) {
           <p class="success">Reservation Created Successfully!</p>
         }
-      </section>
+  </section>
+      } @else {
+        <p class="info-note">
+          To Create Reservation You Have To Be Registered As Guest.
+         
+        </p>
+      }
+
     }
   }
 </div>

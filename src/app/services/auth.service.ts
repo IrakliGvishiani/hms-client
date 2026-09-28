@@ -11,7 +11,7 @@ import { GuestRegistrationRequest } from '../models/guest.models';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:8080/api/auth';
+  private readonly apiUrl = '/api/auth';
 
   isAuthorized = signal(false);
   role = signal<string | null>(null);
