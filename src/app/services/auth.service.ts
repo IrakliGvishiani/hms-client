@@ -43,9 +43,9 @@ confirmEmail(model: ConfirmEmailRequest): Observable<ApiResponse<any>> {
 }
 
 resendConfirmationCode(email: string): Observable<ApiResponse<any>> {
-  return this.http.post<ApiResponse<any>>(
+  return this.http.get<ApiResponse<any>>(
     `${this.apiUrl}/resend-confirmation-code`,
-    { email }
+    { params: { email } }
   );
 }
 

@@ -120,6 +120,11 @@ export const routes: Routes = [
       ]
     },
     {
+      path: 'hotel',
+      canActivate: [roleGuard(['Manager'])],
+      loadComponent: () => import('./admin-dashboard/hotel.form/hotel.form.component').then(m => m.HotelFormComponent)
+    },
+    {
       path: 'reservations',
       canActivate: [roleGuard(['Manager'])],
       children: [

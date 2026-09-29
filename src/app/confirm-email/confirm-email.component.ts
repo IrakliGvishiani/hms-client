@@ -32,16 +32,17 @@ private authService: AuthService
 ) {}
 
 ngOnInit(): void {
-this.route.queryParams.subscribe(params => {
-this.email = params['email'] ?? '';
+  this.route.queryParams.subscribe(params => {
+    this.email = params['email'] ?? '';
 
+    if (!this.email) {
+      this.errorMessage.set('Email address is missing.');
+      return;
+    }
 
-  if (!this.email) {
-    this.errorMessage.set('Email address is missing.');
-  }
-});
-
-
+  
+    this.sendInitialCode();
+  });
 }
 
 onSubmit(): void {
@@ -129,6 +130,18 @@ this.authService.resendConfirmationCode(this.email).subscribe({
 });
 
 
+}
+
+
+private sendInitialCode(): void {
+  this.authService.resendConfirmationCode(this.email).subscribe({
+    next: () => {
+      this.successMessage.set('A confirmation code has been sent to your email.');
+      this.startResendCooldown();
+    },
+    error: (err) => {
+    }
+  });
 }
 
 private startResendCooldown(): void {
