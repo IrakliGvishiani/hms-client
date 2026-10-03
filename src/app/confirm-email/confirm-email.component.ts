@@ -40,8 +40,6 @@ ngOnInit(): void {
       return;
     }
 
-  
-    this.sendInitialCode();
   });
 }
 
@@ -133,16 +131,16 @@ this.authService.resendConfirmationCode(this.email).subscribe({
 }
 
 
-private sendInitialCode(): void {
-  this.authService.resendConfirmationCode(this.email).subscribe({
-    next: () => {
-      this.successMessage.set('A confirmation code has been sent to your email.');
-      this.startResendCooldown();
-    },
-    error: (err) => {
-    }
-  });
-}
+// private sendInitialCode(): void {
+//   this.authService.resendConfirmationCode(this.email).subscribe({
+//     next: () => {
+//       this.successMessage.set('A confirmation code has been sent to your email.');
+//       this.startResendCooldown();
+//     },
+//     error: (err) => {
+//     }
+//   });
+// }
 
 private startResendCooldown(): void {
 this.resendCooldown.set(60);
