@@ -4,9 +4,31 @@
   } @else {
     @if (hotel(); as h) {
       <div class="hotel-header">
-        @if (h.primaryImageUrl) {
-          <img [src]="h.primaryImageUrl" [alt]="h.name" class="hero-image">
-        }
+        <div class="carousel">
+          @if (h.images.length > 0) {
+            <div class="carousel-main">
+              @if (h.images.length > 1) {
+                <button class="carousel-arrow left" (click)="prevImage()">‹</button>
+              }
+              <img [src]="h.images[currentImageIndex()].url" [alt]="h.name">
+              @if (h.images.length > 1) {
+                <button class="carousel-arrow right" (click)="nextImage()">›</button>
+              }
+            </div>
+
+            @if (h.images.length > 1) {
+              <div class="carousel-thumbs">
+                @for (img of h.images; track img.id; let i = $index) {
+                  <img [src]="img.url"
+                       [class.active]="i === currentImageIndex()"
+                       (click)="goToImage(i)">
+                }
+              </div>
+            }
+          } @else {
+            <div class="no-image">No Image Available</div>
+          }
+        </div>
 
         <div class="hotel-info">
           <h1>{{ h.name }}</h1>
@@ -15,20 +37,38 @@
         </div>
       </div>
 
-      @if (h.images.length > 1) {
-        <div class="image-gallery">
-          @for (img of h.images; track img.id) {
-            <img [src]="img.url" [alt]="h.name">
-          }
-        </div>
-      }
-
       <section class="rooms-section">
         <h2>Rooms</h2>
 
+        <div class="search-bar">
+  <label>
+    Check-in
+    <input type="date" [(ngModel)]="checkIn" [min]="today">
+  </label>
+  <label>
+    Check-out
+    <input type="date" [(ngModel)]="checkOut" [min]="checkIn || today">
+  </label>
+  <label>
+    Min price
+    <input type="number" [(ngModel)]="minPrice" min="0" placeholder="0">
+  </label>
+  <label>
+    Max price
+    <input type="number" [(ngModel)]="maxPrice" min="0" placeholder="Any">
+  </label>
+
+  <button (click)="searchRooms()">Search</button>
+  <button class="secondary" (click)="resetSearch()">Reset</button>
+</div>
+
+@if (searchError()) {
+  <p class="error">{{ searchError() }}</p>
+}
+
         <div class="room-grid">
           @for (room of rooms(); track room.id) {
-            <div style="cursor: pointer;" class="room-card" (click)="viewRoom(room.id)">
+            <div class="room-card" (click)="viewRoom(room.id)">
               @if (room.primaryImageUrl) {
                 <img [src]="room.primaryImageUrl" [alt]="room.name">
               }

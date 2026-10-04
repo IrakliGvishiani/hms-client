@@ -1,0 +1,26 @@
+.room-tag {
+  font-size: 12px;
+  color: var(--text-muted);
+
+  &:not(:last-child) {
+    margin-bottom: 2px;
+  }
+}
+
+.total-cell {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+
+  &.status-0 { background: #eff6ff; color: #2563eb; }
+  &.status-1 { background: #f0fdf4; color: #16a34a; }
+  &.status-2 { background: #f1f5f9; color: #475569; }
+  &.status-3 { background: #fef2f2; color: #dc2626; }
+}

@@ -2,25 +2,25 @@
   <div class="header-row">
     <h2>Reservations</h2>
     <button type="button" (click)="newReservation()" class="btn-primary">
-  + New Reservation
-</button>
+      + New Reservation
+    </button>
   </div>
 
   <div class="filters">
-  @if (!isManager()) {
-    <select [(ngModel)]="selectedHotelId" (ngModelChange)="onFilterChange()">
-      <option [ngValue]="null">All Hotel</option>
-      @for (hotel of hotels(); track hotel.id) {
-        <option [ngValue]="hotel.id">{{ hotel.name }}</option>
-      }
-    </select>
-  }
+    @if (!isManager()) {
+      <select [(ngModel)]="selectedHotelId" (ngModelChange)="onFilterChange()">
+        <option [ngValue]="null">All Hotel</option>
+        @for (hotel of hotels(); track hotel.id) {
+          <option [ngValue]="hotel.id">{{ hotel.name }}</option>
+        }
+      </select>
+    }
 
-  <label>
-    <input type="checkbox" [(ngModel)]="activeOnly" (ngModelChange)="onFilterChange()">
-    Only Active
-  </label>
-</div>
+    <label>
+      <input type="checkbox" [(ngModel)]="activeOnly" (ngModelChange)="onFilterChange()">
+      Only Active
+    </label>
+  </div>
 
   @if (loading()) {
     <p>Loading...</p>
@@ -30,8 +30,11 @@
         <tr>
           <th>Guest</th>
           <th>Hotel</th>
+          <th>Rooms</th>
           <th>Check-in</th>
           <th>Check-out</th>
+          <th>Nights</th>
+          <th>Total</th>
           <th>Status</th>
           <th></th>
         </tr>
@@ -41,18 +44,29 @@
           <tr>
             <td>{{ r.guestName }}</td>
             <td>{{ r.hotelName }}</td>
+            <td>
+              @for (room of r.rooms; track room.roomId) {
+                <div class="room-tag">{{ room.roomName }}</div>
+              }
+            </td>
             <td>{{ r.checkInDate | date:'yyyy-MM-dd' }}</td>
             <td>{{ r.checkOutDate | date:'yyyy-MM-dd' }}</td>
-            <td>{{ statusLabel(r.status) }}</td>
+            <td>{{ r.nights }}</td>
+            <td class="total-cell">{{ r.totalPrice }} $</td>
+            <td>
+              <span class="status-badge" [class]="'status-' + r.status">
+                {{ statusLabel(r.status) }}
+              </span>
+            </td>
             <td class="actions">
               <a
-              [routerLink]="[
-                isManager() ? '/manager/reservations' : '/admin/reservations',
-                r.id,
-                'edit'
-              ]">
-              Edit
-            </a>
+                [routerLink]="[
+                  isManager() ? '/manager/reservations' : '/admin/reservations',
+                  r.id,
+                  'edit'
+                ]">
+                Edit
+              </a>
               @if (r.status !== ReservationStatus.Cancelled) {
                 <button (click)="onCancel(r.id)" class="btn-danger">Cancel</button>
               }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ApiResponse } from './../models/auth.models';
@@ -90,6 +90,24 @@ export class RoomService {
       formData
     );
   }
+
+searchRooms(params: {
+  hotelId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  minPrice?: number | null;
+  maxPrice?: number | null;
+}): Observable<ApiResponse<Room[]>> {
+  let httpParams = new HttpParams()
+    .set('hotelId', params.hotelId.toString())
+    .set('checkInDate', params.checkInDate)
+    .set('checkOutDate', params.checkOutDate);
+
+  if (params.minPrice != null) httpParams = httpParams.set('minPrice', params.minPrice.toString());
+  if (params.maxPrice != null) httpParams = httpParams.set('maxPrice', params.maxPrice.toString());
+
+  return this.http.get<ApiResponse<Room[]>>(`${this.apiUrl}/search`, { params: httpParams });
+}
 
   delete(id: number): Observable<ApiResponse<null>> {
     return this.http.delete<ApiResponse<null>>(

@@ -4,7 +4,10 @@
   background: #f5f6f8;
 }
 
-/* Sidebar */
+*{
+  text-decoration: none;
+}
+
 .sidebar {
   width: 240px;
   min-height: 100vh;
@@ -50,7 +53,7 @@
   color: white;
 }
 
-/* Sidebar Bottom Buttons */
+
 .sidebar-bottom {
   margin-top: auto;
   display: flex;
@@ -129,7 +132,7 @@
   flex: 1;
 }
 
-/* ========== Delete Modal ========== */
+
 .modal-overlay {
   position: fixed;
   inset: 0;

@@ -5,35 +5,55 @@
     <p>Loading...</p>
   } @else {
     @if (reservations().length === 0) {
-      <p>Couldn't find reservationsა</p>
+      <p>Couldn't find reservations</p>
     } @else {
-      <table>
-        <thead>
-          <tr>
-            <th>Hotel</th>
-            <th>Check-in</th>
-            <th>Check-out</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (r of reservations(); track r.id) {
-            <tr>
-              <td>{{ r.hotelName }}</td>
-              <td>{{ r.checkInDate | date:'yyyy-MM-dd' }}</td>
-              <td>{{ r.checkOutDate | date:'yyyy-MM-dd' }}</td>
-              <td>{{ statusLabel(r.status) }}</td>
-              <td class="actions">
-                @if (r.status !== ReservationStatus.Cancelled) {
-                  <a [routerLink]="['/my-reservations', r.id, 'edit']">Edit</a>
-                  <button (click)="onCancel(r.id)" class="btn-danger">Cancel</button>
+      <div class="reservation-cards">
+        @for (r of reservations(); track r.id) {
+          <div class="reservation-card">
+            <div class="reservation-header">
+              <h3>{{ r.hotelName }}</h3>
+              <span class="status-badge" [class]="'status-' + r.status">
+                {{ statusLabel(r.status) }}
+              </span>
+            </div>
+
+            <div class="reservation-dates">
+              <div>
+                <span class="label">Check-in</span>
+                <span class="value">{{ r.checkInDate | date:'yyyy-MM-dd' }}</span>
+              </div>
+              <div>
+                <span class="label">Check-out</span>
+                <span class="value">{{ r.checkOutDate | date:'yyyy-MM-dd' }}</span>
+              </div>
+              <div>
+                <span class="label">Nights</span>
+                <span class="value">{{ r.nights }}</span>
+              </div>
+            </div>
+
+            <div class="reservation-rooms">
+              <span class="label">Rooms</span>
+              <ul>
+                @for (room of r.rooms; track room.roomId) {
+                  <li>{{ room.roomName }} — {{ room.pricePerNight }} $ / night</li>
                 }
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+              </ul>
+            </div>
+
+            <div class="reservation-footer">
+              <span class="total-price">Total: {{ r.totalPrice }} $</span>
+
+              @if (r.status !== ReservationStatus.Cancelled) {
+                <div class="actions">
+                  <a [routerLink]="['/my-reservations', r.id, 'edit']" class="btn-secondary">Edit</a>
+                  <button (click)="onCancel(r.id)" class="btn-danger">Cancel</button>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
     }
   }
 </div>

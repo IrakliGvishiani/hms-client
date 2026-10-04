@@ -1,7 +1,96 @@
 .my-reservations-page {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 32px 24px;
 
   h2 { margin-bottom: 20px; }
+}
+
+.reservation-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reservation-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.reservation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+
+  h3 { margin: 0; font-size: 18px; }
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+
+  &.status-0 { background: #eff6ff; color: #2563eb; } /* Reserved */
+  &.status-1 { background: #f0fdf4; color: #16a34a; } /* Active */
+  &.status-2 { background: #f1f5f9; color: #475569; } /* Completed */
+  &.status-3 { background: #fef2f2; color: #dc2626; } /* Cancelled */
+}
+
+.reservation-dates {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+.label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reservation-rooms {
+  margin-bottom: 14px;
+
+  ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    font-size: 14px;
+  }
+}
+
+.reservation-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.total-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

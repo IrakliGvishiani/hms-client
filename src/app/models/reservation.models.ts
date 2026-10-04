@@ -4,6 +4,11 @@ export enum ReservationStatus {
   Completed = 2,
   Cancelled = 3
 }
+export interface ReservationRoomInfo {
+  roomId: number;
+  roomName: string;
+  pricePerNight: number;
+}
 
 export interface ReservationForCreatingDto {
   checkInDate: string;
@@ -20,8 +25,11 @@ export interface ReservationForGettingDto {
   guestName: string;
   guestPhoneNumber: string;
   roomIds: number[];
+  rooms: ReservationRoomInfo[];
   hotelId: number;
   hotelName: string;
+  nights: number;
+  totalPrice: number;
   status: ReservationStatus;
 }
 
